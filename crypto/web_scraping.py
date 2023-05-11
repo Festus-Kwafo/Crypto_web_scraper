@@ -1,11 +1,10 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 from background_task import background
 from crypto.models import Crypto
-from crypto.utils import get_digits_int, get_digits_float, remove_percent_sign, format_market_cap
+from crypto.utils import format_market_cap
 
 
 @background()

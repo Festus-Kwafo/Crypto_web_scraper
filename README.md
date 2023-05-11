@@ -1,1 +1,1 @@
-"# Cypto Web Scraper" 
+# Cypto Web Scraper

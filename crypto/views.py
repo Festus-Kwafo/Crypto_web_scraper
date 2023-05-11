@@ -11,9 +11,11 @@ from datetime import datetime
 class StartScraping(APIView):
     def get(self, request):
         try:
+            # call the function to at the background
             scrap_data_2()
             return Response({"detail": "Task started successfully in the background"})
         except Exception as e:
+            print(e)
             return Response({"detail": "Error in starting the task"})
 
 
