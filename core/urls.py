@@ -35,7 +35,7 @@ schema_view = get_schema_view(openapi.Info(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("crypto.urls")),
-    re_path(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui')
+    re_path(r'^api/v1/docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui')
 ]
 
 urlpatterns+= static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

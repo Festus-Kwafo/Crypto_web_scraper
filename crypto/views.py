@@ -8,15 +8,15 @@ import pandas as pd
 from datetime import datetime
 
 
-class StartScraping(APIView):
-    def get(self, request):
-        try:
-            # call the function to at the background
-            scrap_data_2()
-            return Response({"detail": "Task started successfully in the background"})
-        except Exception as e:
-            print(e)
-            return Response({"detail": "Error in starting the task"})
+@api_view(['GET'])
+def start_scraping(request):
+    try:
+        # call the function to at the background
+        scrap_data_2()
+        return Response({"detail": "Task started successfully in the background"})
+    except Exception as e:
+        print(e)
+        return Response({"detail": "Error in starting the task"})
 
 
 @api_view(['GET', 'DELETE'])
@@ -32,5 +32,11 @@ def records_list(request):
 
 def create_data_excel():
     crypto = Crypto.objects.all()
-    df = pd.DataFrame(list(crypto.values()))
+    data = CryptoSerializer(crypto, many=True).data
+    df = pd.DataFrame(data)
+
+    #Convert percentage column to seprate Column
+    if isinstance(df['percent_change'].iloc[0], dict):
+        percent_change_df = df['percent_change'].apply(pd.Series)
+        df = pd.concat([df.drop(['percent_change'], axis=1), percent_change_df], axis=1)
     return df.to_excel('output_{}.xlsx'.format(datetime.now().strftime("%H%M%S%m%d%Y")))

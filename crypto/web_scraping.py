@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from time import sleep
 from background_task import background
-from crypto.models import Crypto
+from crypto.models import Crypto, PercentageChange
 from crypto.utils import format_market_cap
 
 
@@ -31,15 +31,21 @@ def scrap_data_2():
 
             # Check if we are at the bottom of the page
             if current_position + viewport_height >= total_height:
+                #Get the page HTML
                 html = driver.page_source
                 soup = BeautifulSoup(html, 'html.parser')
+                #Find All table rows
                 rows = soup.findAll('tr')
                 rows = rows[2:]
+                #
                 for row in rows[index:]:
                     cols = row.find_all('td')
                     i = [ele.text.strip() for ele in cols]
                     if len(i) >= 1:
-                        pass
+                        percent_change = PercentageChange(  change_1h=i[7],
+                                                            change_24h=i[8],
+                                                            change_7d=i[9],)
+                        percent_change.save()
                         crypto = Crypto(rank=i[0],
                                         name=i[1],
                                         symbol=i[2],
@@ -47,9 +53,7 @@ def scrap_data_2():
                                         price=i[4],
                                         circulating_supply=i[5],
                                         volume=i[6],
-                                        change_1h=i[7],
-                                        change_24h=i[8],
-                                        change_7d=i[9],
+                                        percent_change = percent_change
                                         )
                         crypto.save()
                 index = len(rows)
