@@ -12,7 +12,7 @@ from datetime import datetime
 def start_scraping(request):
     try:
         # call the function to at the background
-        scrap_data_2()
+        scrap_data_2(verbose_name="Scrape the web")
         return Response({"detail": "Task started successfully in the background"})
     except Exception as e:
         print(e)

@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from time import sleep
 from background_task import background
 from crypto.models import Crypto, PercentageChange
-from crypto.utils import format_market_cap
+from crypto.utils import format_market_cap, remove_percent_sign, format_circulating_supply
 
 
 @background()
@@ -42,16 +42,16 @@ def scrap_data_2():
                     cols = row.find_all('td')
                     i = [ele.text.strip() for ele in cols]
                     if len(i) >= 1:
-                        percent_change = PercentageChange(  change_1h=i[7],
-                                                            change_24h=i[8],
-                                                            change_7d=i[9],)
+                        percent_change = PercentageChange(  change_1h=remove_percent_sign(i[7]),
+                                                            change_24h=remove_percent_sign(i[8]),
+                                                            change_7d=remove_percent_sign(i[9]))
                         percent_change.save()
                         crypto = Crypto(rank=i[0],
                                         name=i[1],
                                         symbol=i[2],
                                         market_cap=format_market_cap(i[3]),
                                         price=i[4],
-                                        circulating_supply=i[5],
+                                        circulating_supply= format_circulating_supply(i[5]),
                                         volume=i[6],
                                         percent_change = percent_change
                                         )
