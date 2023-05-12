@@ -1,4 +1,4 @@
-# Tourist_Managing_System
+# Web Sraper
 An application to scrape data from https://coinmarketcap.com/all/views/all/, stored in the database and exposed via RESTful API. 
 
 ## Table of contents
